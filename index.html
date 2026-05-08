@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise Website Order Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f9; }
+        .form-box { background: white; padding: 20px; max-width: 400px; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #218838; }
+        #status { margin-top: 15px; color: green; font-weight: bold; display: none; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="form-box">
+        <h2>Order Your Surprise Website</h2>
+        
+        <form id="testForm">
+            <label>Your Name:</label>
+            <input type="text" name="name" required placeholder="Enter Name">
+            
+            <label>Phone Number:</label>
+            <input type="text" name="phone" required placeholder="Enter Phone">
+            
+            <label>Order Details:</label>
+            <textarea name="order" required placeholder="Kya banwana hai?"></textarea>
+            
+            <button type="submit" id="submitBtn">Submit Order</button>
+        </form>
+
+        <div id="status">Data Google Sheet mein save ho gaya! 🎉</div>
+    </div>
+
+    <script>
+        // Yahan apna copy kiya hua Google Apps Script ka Web App URL daalein
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyDSKnsPqN6zVm99Sxdt55UL69fxjXjAo7A-Ob2p7KvSOL8g2qXzaprLwQOwGsh07ew/execs'; 
+        
+        const form = document.getElementById('testForm');
+        const btn = document.getElementById('submitBtn');
+        const statusText = document.getElementById('status');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault(); // Page refresh hone se rokne ke liye
+            
+            btn.innerHTML = "Saving... ⏳"; // Button ka text change kiya
+            
+            // Form ka data utha kar Google Sheet par bhej rahe hain
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    statusText.style.display = "block"; // Success message dikhaya
+                    btn.innerHTML = "Submit Order";
+                    form.reset(); // Form khali kar diya
+                })
+                .catch(error => {
+                    alert('Error saving data!');
+                    btn.innerHTML = "Submit Order";
+                });
+        });
+    </script>
+
+</body>
+</html>
